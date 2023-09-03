@@ -1,47 +1,37 @@
-document.getElementById("vectorize-btn").addEventListener("click", async () => {
-    const fileInput = document.getElementById('file-upload');
-    if (!fileInput.files.length) {
-        alert("Please upload an image first.");
-        return;
-    }
 
-    const selectedColor = document.querySelector('.color-circle.selected');
-    if (!selectedColor) {
-        alert("Please select a color count.");
-        return;
-    }
+let selectedColor = 1; // Default color is set to 1
 
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('processing.max_colors', selectedColor.textContent);
-    formData.append('output.file_format', 'svg');
-
-    try {
-        const response = await fetch("https://api.vectorizer.ai/api/v1/vectorize", {
-            method: 'POST',
-            headers: {
-                "Authorization": `Basic ${process.env.VECTORIZER_API_KEY}`
-            },
-            body: formData
-        });
-
-        const data = await response.json();
-        if (data && data.output && data.output.url) {
-            const slider = document.querySelector(".image-slider");
-            slider.innerHTML = `<img src="${data.output.url}" alt="Vectorized Image">`;
-            document.getElementById("download-btn").href = data.output.url;
+// Function to select color and change the appearance of color circles
+function selectColor(color) {
+    for (let i = 1; i <= 6; i++) {
+        if (i === color) {
+            document.getElementById("color-" + i).classList.add("selected");
         } else {
-            alert("Failed to vectorize the image. Please try again.");
+            document.getElementById("color-" + i).classList.remove("selected");
         }
-    } catch (error) {
-        console.error("Error vectorizing the image:", error);
-        alert("An error occurred. Please try again.");
+    }
+    selectedColor = color;
+}
+
+// Function to handle file upload and display the selected image for preview
+document.getElementById("file-upload").addEventListener("change", function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const imgElement = document.createElement("img");
+            imgElement.setAttribute("src", event.target.result);
+            document.querySelector(".image-preview").appendChild(imgElement);
+        }
+        reader.readAsDataURL(file);
     }
 });
 
-function selectColor(num) {
-    const allColors = document.querySelectorAll('.color-circle');
-    allColors.forEach(el => el.classList.remove('selected'));
-    document.getElementById(`color-${num}`).classList.add('selected');
-}
+// Function to handle the "Vectorize" button click
+document.getElementById("vectorize-btn").addEventListener("click", function() {
+    // Here, you would make the API call to vectorize the image using the selected color
+    // For the purpose of this demonstration, I'm just alerting the selected color
+    alert("Vectorizing with color: " + selectedColor);
+    // Note: You'll need to integrate the actual API call and handle the response accordingly
+});
+

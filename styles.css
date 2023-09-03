@@ -6,7 +6,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
 .container {
     max-width: 800px;
     margin: 50px auto;
@@ -38,7 +37,6 @@ body {
     text-align: center;
     margin-bottom: 30px;
 }
-
 .file-upload-btn {
     display: block;
     width: 100%;
@@ -52,9 +50,20 @@ body {
     border: none;
     transition: background-color 0.3s ease;
 }
-
 .file-upload-btn:hover {
     background-color: #34495e;
+}
+
+/* Image Preview Styles */
+.image-preview {
+    width: 100%;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+.image-preview img {
+    max-width: 100%;
+    border-radius: 5px;
 }
 
 /* Color Picker Styles */
@@ -63,7 +72,6 @@ body {
     justify-content: center;
     margin-bottom: 30px;
 }
-
 .color-circle {
     width: 40px;
     height: 40px;
@@ -73,15 +81,15 @@ body {
     border: 2px solid #3498db;
     color: #3498db;
     font-weight: bold;
-    font-size: 16px; /* Increase font size for visibility */
+    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
-
-.color-circle.selected, .color-circle:hover {
+.color-circle.selected {
+    transform: scale(1.2);
     background-color: #3498db;
     color: #fff;
 }
@@ -98,7 +106,6 @@ body {
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
-
 .btn:hover {
     background-color: #fff;
     color: #3498db;
@@ -108,7 +115,6 @@ body {
 .image-slider {
     margin-top: 30px;
 }
-
 .image-slider img {
     max-width: 100%;
     border-radius: 10px;

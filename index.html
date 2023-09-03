@@ -1,44 +1,40 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vectorizer App</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
-
 <body>
     <div class="container">
-        <!-- File Upload -->
         <div class="file-upload-container">
             <input type="file" id="file-upload" style="display: none;">
             <label for="file-upload" class="file-upload-btn">Upload Logo</label>
         </div>
 
-        <!-- Color Selection -->
+        <div class="image-preview"></div> <!-- Added for uploaded image preview -->
+
         <div class="color-picker-container">
-            <div class="color-circle" data-color="1">1</div>
-            <div class="color-circle" data-color="2">2</div>
-            <div class="color-circle" data-color="3">3</div>
-            <div class="color-circle" data-color="4">4</div>
-            <div class="color-circle" data-color="5">5</div>
-            <div class="color-circle" data-color="6">6</div>
+            <div class="color-circle" onclick="selectColor(1)" id="color-1">1</div>
+            <div class="color-circle" onclick="selectColor(2)" id="color-2">2</div>
+            <div class="color-circle" onclick="selectColor(3)" id="color-3">3</div>
+            <div class="color-circle" onclick="selectColor(4)" id="color-4">4</div>
+            <div class="color-circle" onclick="selectColor(5)" id="color-5">5</div>
+            <div class="color-circle" onclick="selectColor(6)" id="color-6">6</div>
         </div>
 
-        <!-- Buttons -->
         <div class="button-container" style="text-align: center;">
             <button class="vectorize-btn" id="vectorize-btn">Vectorize</button>
             <a href="#" download class="btn" id="download-btn">Download SVG</a>
         </div>
 
-        <!-- Image Display -->
         <div class="image-slider">
             <!-- Images from the API will be displayed here -->
         </div>
     </div>
-</body>
 
+    <script src="script.js"></script>
+</body>
 </html>
