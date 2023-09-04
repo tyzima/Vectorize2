@@ -8,8 +8,8 @@ exports.handler = async (event, context) => {
 
     const apiUrl = 'https://api.vectorizer.ai/api/v1/vectorize';
     const apiHeaders = {
-        "Authorization": `Basic ${process.env.VECTORIZER_API_KEY}`,
-        "Content-Type": "multipart/form-data"
+        ...event.headers,
+        "Authorization": `Basic ${process.env.VECTORIZER_API_KEY}`
     };
 
     try {
