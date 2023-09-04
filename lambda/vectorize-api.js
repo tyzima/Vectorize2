@@ -17,7 +17,7 @@ exports.handler = function(event, context, callback) {
     request.post({
         url: apiUrl,
         formData: formData,
-        auth: {user: process.env.VECTORIZER_API_KEY, pass: ''}, // Assuming API key is user
+        auth: {user: 'vkvnbyc5irrvjbi', pass: 'u8uqg816t4bq8kqnov8gielo6hf2sordh1fndodm2imas8otovti'},
         followAllRedirects: true,
         encoding: null
     }, function(error, response, body) {
