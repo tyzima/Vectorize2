@@ -56,7 +56,7 @@ function processImage() {
 
     const API_KEY = "dmt2bmJ5YzVpcnJ2amJpOjExMGZscmY4cmc4amFhdHI1bXNvOTZjZTA4dTlibm";  // Replace YOUR_API_KEY_HERE with your actual API key
 
-    fetch('https://api.vectorizer.ai/api/v1/vectorize', {
+    fetch('/.netlify/functions/vectorize-api', {
         method: 'POST',
         headers: {
             'Authorization': 'Basic ' + API_KEY
