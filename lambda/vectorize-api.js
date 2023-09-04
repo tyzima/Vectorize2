@@ -1,26 +1,42 @@
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
+const fs = require('fs').promises;
 
-exports.handler = async function(event, context) {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
-  }
+exports.handler = async (event, context) => {
+    if (event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
 
-  const API_URL = "https://api.vectorizer.ai/api/v1/vectorize";
-  const API_KEY = process.env.VECTORIZER_API_KEY;
+    const apiUrl = 'https://api.vectorizer.ai/api/v1/vectorize';
+    const apiHeaders = {
+        "Authorization": `Basic ${process.env.VECTORIZER_API_KEY}`
+    };
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": "Basic " + API_KEY,
-      "Content-Type": "multipart/form-data"
-    },
-    body: event.body
-  });
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: apiHeaders,
+            body: event.body
+        });
 
-  const data = await response.json();
+        // Check for non-JSON responses
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') === -1) {
+            // Not a JSON response
+            return {
+                statusCode: response.status,
+                body: await response.text()
+            };
+        }
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(data)
-  };
+        const data = await response.json();
+        return {
+            statusCode: 200,
+            body: JSON.stringify(data)
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: `Error vectorizing the image. ${error.message}`
+        };
+    }
 };
