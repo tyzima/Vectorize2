@@ -1,5 +1,5 @@
+
 const fetch = require('node-fetch');
-const fs = require('fs').promises;
 
 exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
@@ -18,16 +18,15 @@ exports.handler = async (event, context) => {
             body: event.body
         });
 
-        // Check for non-JSON responses
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.indexOf('application/json') === -1) {
-            // Not a JSON response
+        // If response is not OK, return the response as text
+        if (!response.ok) {
             return {
                 statusCode: response.status,
                 body: await response.text()
             };
         }
 
+        // Return the JSON response
         const data = await response.json();
         return {
             statusCode: 200,
@@ -36,7 +35,7 @@ exports.handler = async (event, context) => {
     } catch (error) {
         return {
             statusCode: 500,
-            body: `Error vectorizing the image. ${error.message}`
+            body: `Error vectorizing the image: ${error.message}`
         };
     }
 };
