@@ -54,16 +54,18 @@ function processImage() {
     formData.append('processing.max_colors', selectedColorCount);
     formData.append('output.file_format', 'svg');
 
-    const API_KEY = "dmt2bmJ5YzVpcnJ2amJpOjExMGZscmY4cmc4amFhdHI1bXNvOTZjZTA4dTlibm";  // Replace YOUR_API_KEY_HERE with your actual API key
-
     fetch('/.netlify/functions/vectorize-api', {
         method: 'POST',
-        headers: {
-            'Authorization': 'Basic ' + API_KEY
-        },
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(text);
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data && data.output && data.output.url) {
             // Display SVG beside the original image
@@ -80,7 +82,7 @@ function processImage() {
         }
     })
     .catch(error => {
-        alert('Error processing the image. Please try again.');
+        alert(`Error processing the image: ${error.message}`);
     });
 }
 
