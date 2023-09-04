@@ -1,41 +1,43 @@
+const fetch = require('node-fetch');
 
-const request = require('request');
-
-exports.handler = function(event, context, callback) {
+exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
-        callback(null, { statusCode: 405, body: 'Method Not Allowed' });
-        return;
+        return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     const apiUrl = 'https://api.vectorizer.ai/api/v1/vectorize';
-
-    const formData = {
-        image: event.body // assuming the image is being sent as binary in the body
-        // TODO: Add more upload options here based on the API's parameters
+    const apiHeaders = {
+        "Authorization": `Basic ${process.env.VECTORIZER_API_KEY}`,
+        "Content-Type": "multipart/form-data"   // Set the Content-Type for file upload
     };
 
-    request.post({
-        url: apiUrl,
-        formData: formData,
-        auth: {user: 'vkvnbyc5irrvjbi', pass: 'u8uqg816t4bq8kqnov8gielo6hf2sordh1fndodm2imas8otovti'},
-        followAllRedirects: true,
-        encoding: null
-    }, function(error, response, body) {
-        if (error) {
-            callback(null, {
-                statusCode: 500,
-                body: `Error vectorizing the image: ${error.message}`
-            });
-        } else if (!response || response.statusCode != 200) {
-            callback(null, {
-                statusCode: response && response.statusCode,
-                body: body.toString('utf8')
-            });
-        } else {
-            callback(null, {
-                statusCode: 200,
-                body: body.toString('utf8') // Assuming the response is SVG or textual data
-            });
+    try {
+        // Forward the received binary image data to the Vectorize API
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: apiHeaders,
+            body: event.body   // This should contain the binary data of the image
+        });
+
+        // Check for non-JSON responses
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') === -1) {
+            // Not a JSON response
+            return {
+                statusCode: response.status,
+                body: await response.text()
+            };
         }
-    });
+
+        const data = await response.json();
+        return {
+            statusCode: 200,
+            body: JSON.stringify(data)
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: `Error vectorizing the image. ${error.message}`
+        };
+    }
 };
