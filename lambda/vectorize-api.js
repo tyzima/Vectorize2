@@ -1,5 +1,5 @@
 
-const fetch = require('node-fetch');
+const { URLSearchParams } = require('url');
 
 exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
@@ -13,6 +13,8 @@ exports.handler = async (event, context) => {
     };
 
     try {
+        const fetch = (await import('node-fetch')).default;
+
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: apiHeaders,
