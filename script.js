@@ -4,7 +4,6 @@ const colorCircles = document.querySelectorAll(".color-circle");
 const vectorizeButton = document.getElementById("vectorize-btn");
 const downloadButton = document.getElementById("download-btn");
 const imageSlider = document.querySelector(".image-slider");
-
 let selectedColorCount = 0;
 
 // Function to select the color count
@@ -16,6 +15,23 @@ function selectColor(count) {
     // Setting the selected color count
     document.getElementById(`color-${count}`).classList.add('selected');
     selectedColorCount = count;
+}
+
+// Function to display the uploaded image as "before" image
+function displayUploadedImage() {
+    const fileInput = document.getElementById('file-upload');
+    const image = fileInput.files[0];
+    const imageSlider = document.querySelector('.image-slider');
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        let imgElement = document.createElement('img');
+        imgElement.setAttribute('src', e.target.result);
+        imgElement.setAttribute('alt', 'Uploaded Image');
+        imageSlider.appendChild(imgElement);
+    }
+
+    reader.readAsDataURL(image);
 }
 
 // Function to process the image using Vectorize API
@@ -38,10 +54,12 @@ function processImage() {
     formData.append('processing.max_colors', selectedColorCount);
     formData.append('output.file_format', 'svg');
 
+    const API_KEY = "YOUR_API_KEY_HERE";  // Replace YOUR_API_KEY_HERE with your actual API key
+
     fetch('https://api.vectorizer.ai/api/v1/vectorize', {
         method: 'POST',
         headers: {
-            'Authorization': 'Basic ' + process.env.VECTORIZER_API_KEY
+            'Authorization': 'Basic ' + API_KEY
         },
         body: formData
     })
@@ -68,3 +86,4 @@ function processImage() {
 
 // Attach the processImage function to the Vectorize button
 document.getElementById('vectorize-btn').addEventListener('click', processImage);
+document.getElementById('file-upload').addEventListener('change', displayUploadedImage);
