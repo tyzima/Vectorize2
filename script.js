@@ -54,7 +54,7 @@ function processImage() {
     formData.append('processing.max_colors', selectedColorCount);
     formData.append('output.file_format', 'svg');
 
-    const API_KEY = "YOUR_API_KEY_HERE";  // Replace YOUR_API_KEY_HERE with your actual API key
+    const API_KEY = "dmt2bmJ5YzVpcnJ2amJpOjExMGZscmY4cmc4amFhdHI1bXNvOTZjZTA4dTlibm";  // Replace YOUR_API_KEY_HERE with your actual API key
 
     fetch('https://api.vectorizer.ai/api/v1/vectorize', {
         method: 'POST',
